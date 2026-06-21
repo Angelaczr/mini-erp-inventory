@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Foundation\Http\FormRequest;
 
 class StoreStockMovementRequest extends FormRequest
 {
@@ -22,6 +22,7 @@ class StoreStockMovementRequest extends FormRequest
             'quantity' => ['required', 'integer', 'min:1'],
             'reference_no' => ['nullable', 'string', 'max:50'],
             'note' => ['nullable', 'string', 'max:1000'],
+            'production_order_id' => ['nullable', 'exists:production_orders,id'],
         ];
     }
 

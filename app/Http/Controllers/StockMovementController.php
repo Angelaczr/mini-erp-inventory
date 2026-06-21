@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreStockMovementRequest;
 use App\Models\Item;
-use App\Models\StockMovement;
 use App\Models\Warehouse;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use App\Models\StockMovement;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\StoreStockMovementRequest;
 
 class StockMovementController extends Controller
 {
@@ -22,10 +22,20 @@ class StockMovementController extends Controller
 
     public function create(): View
     {
+        // $items = Item::orderBy('name')->get();
+        // $warehouses = Warehouse::orderBy('name')->get();
+
+        // return view('stock_movements.create', compact('items', 'warehouses'));
+
         $items = Item::orderBy('name')->get();
         $warehouses = Warehouse::orderBy('name')->get();
 
-        return view('stock_movements.create', compact('items', 'warehouses'));
+        // Ambil PO yang belum selesai untuk ditampilkan di dropdown
+        $activePos = \App\Models\ProductionOrder::whereIn('status', ['planned', 'in_progress'])
+            ->orderBy('po_number')
+            ->get();
+
+        return view('stock_movements.create', compact('items', 'warehouses', 'activePos'));
     }
 
     public function store(StoreStockMovementRequest $request): RedirectResponse

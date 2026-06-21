@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ItemController;
-use App\Http\Controllers\StockMovementController;
-use App\Http\Controllers\WarehouseController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\WarehouseController;
+use App\Http\Controllers\StockMovementController;
+use App\Http\Controllers\ProductionOrderController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -17,3 +18,6 @@ Route::delete('warehouses/{warehouse}', [WarehouseController::class, 'destroy'])
 Route::get('stock-movements', [StockMovementController::class, 'index'])->name('stock-movements.index');
 Route::get('stock-movements/create', [StockMovementController::class, 'create'])->name('stock-movements.create');
 Route::post('stock-movements', [StockMovementController::class, 'store'])->name('stock-movements.store');
+
+Route::resource('production-orders', ProductionOrderController::class);
+// Route::get('production-orders', [ProductionOrderController::class, 'show'])->name('production-orders.show');

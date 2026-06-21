@@ -54,13 +54,28 @@
         </div>
 
         <div class="mb-3">
+            <label class="form-label">Link to Production Order (Optional)</label>
+            <select name="production_order_id" class="form-select">
+                <option value="">-- No PO (General Stock) --</option>
+                @foreach ($activePos as $po)
+                    <option value="{{ $po->id }}" @selected(old('production_order_id') == $po->id)>
+                        {{ $po->po_number }} (Target: {{ $po->item->name }})
+                    </option>
+                @endforeach
+            </select>
+            <div class="form-text">Pilih PO jika pergerakan ini merupakan bagian dari proses produksi garmen.</div>
+        </div>
+
+        <div class="mb-3">
             <label class="form-label">Quantity</label>
-            <input type="number" name="quantity" class="form-control" min="1" value="{{ old('quantity') }}" required>
+            <input type="number" name="quantity" class="form-control" min="1" value="{{ old('quantity') }}"
+                required>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Reference No.</label>
-            <input type="text" name="reference_no" class="form-control" value="{{ old('reference_no') }}" placeholder="e.g. PO-2026-010">
+            <input type="text" name="reference_no" class="form-control" value="{{ old('reference_no') }}"
+                placeholder="e.g. PO-2026-010">
         </div>
 
         <div class="mb-3">
