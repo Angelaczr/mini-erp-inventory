@@ -22,17 +22,32 @@
                             <td>{{ $warehouse->code }}</td>
                             <td>{{ $warehouse->name }}</td>
                             <td>{{ $warehouse->location }}</td>
-                            <td class="text-end">
+                            {{-- <td class="text-end">
                                 <form action="{{ route('warehouses.destroy', $warehouse) }}" method="POST"
                                       onsubmit="return confirm('Delete this warehouse?');">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-sm btn-outline-danger">Delete</button>
                                 </form>
+                            </td> --}}
+                            <td class="text-end">
+                                <form id="delete-form-{{ $warehouse->id }}"
+                                    action="{{ route('warehouses.destroy', $warehouse) }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+
+                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                    onclick="if(confirm('Yakin ingin menghapus data ini?')) { document.getElementById('delete-form-{{ $warehouse->id }}').submit(); }">
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="4" class="text-center text-muted">No warehouses yet.</td></tr>
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">No warehouses yet.</td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>

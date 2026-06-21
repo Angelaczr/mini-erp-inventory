@@ -30,7 +30,7 @@
                         <td>{{ $item->unit }}</td>
                         <td class="text-center">{{ $item->stock_now }}</td>
                         <td class="text-center">{{ $item->reorder_level }}</td>
-                        <td class="text-end">
+                        {{-- <td class="text-end">
                             <a href="{{ route('items.edit', $item) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
                             <form action="{{ route('items.destroy', $item) }}" method="POST" class="d-inline"
                                   onsubmit="return confirm('Delete this item?');">
@@ -38,10 +38,26 @@
                                 @method('DELETE')
                                 <button class="btn btn-sm btn-outline-danger">Delete</button>
                             </form>
+                        </td> --}}
+                        <td class="text-end">
+                            <a href="{{ route('items.edit', $item) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+
+                            <form id="delete-form-{{ $item->id }}" action="{{ route('items.destroy', $item) }}"
+                                method="POST" style="display: none;">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+
+                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                onclick="if(confirm('Yakin ingin menghapus item ini?')) { document.getElementById('delete-form-{{ $item->id }}').submit(); }">
+                                Delete
+                            </button>
                         </td>
                     </tr>
                 @empty
-                    <tr><td colspan="7" class="text-center text-muted">No items yet.</td></tr>
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">No items yet.</td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>

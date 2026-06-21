@@ -6,6 +6,7 @@ if [ -z "$APP_KEY" ]; then
     php artisan key:generate --force
 fi
 
+php artisan view:clear
 # Cache config for performance
 php artisan config:cache
 php artisan route:cache
