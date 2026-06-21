@@ -12,6 +12,12 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // Guard: skip seeding if data already exists, so this stays safe
+        // to re-run on every container boot without creating duplicates.
+        if (Warehouse::count() > 0) {
+            return;
+        }
+
         // 3 warehouses, mirroring a multi-warehouse garment manufacturing setup
         $warehouses = [
             Warehouse::create(['code' => 'WH-01', 'name' => 'Main Warehouse', 'location' => 'Jakarta Pusat']),

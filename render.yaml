@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: mini-erp-inventory
+    runtime: docker
+    plan: free
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        sync: false   # paste from Supabase → Project Settings → Database
+      - key: DB_PORT
+        value: 6543   # Supabase's connection pooler port (recommended for serverless/short-lived connections)
+      - key: DB_DATABASE
+        value: postgres
+      - key: DB_USERNAME
+        sync: false   # e.g. postgres.xxxxxxxxxxxx
+      - key: DB_PASSWORD
+        sync: false   # set this as a secret in the Render dashboard, not in this file

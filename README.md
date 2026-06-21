@@ -63,6 +63,59 @@ Current stock is **never stored directly** — it's always derived from the move
 - Validation logic for preventing over-withdrawal lives in `StoreStockMovementRequest`, keeping controllers thin
 - API controllers are separated from web controllers (`App\Http\Controllers\Api`) to keep concerns isolated
 
+## 🌐 Live Demo Deployment (Render + Supabase — both free forever)
+
+This repo includes a `Dockerfile` + `render.yaml` for deploying to [Render](https://render.com)'s permanent free web service tier, connected to a [Supabase](https://supabase.com) free PostgreSQL database.
+
+**Why this combo:**
+- Render web service: free forever, no credit card, sleeps after 15 min of inactivity (30–60s cold start on next visit) — fine for a portfolio demo
+- Supabase Postgres: free forever, no credit card, **pauses after 7 days of zero database activity** (data is preserved, not deleted) — this repo includes a GitHub Action that pings the live demo daily to prevent that entirely
+
+### Step 1 — Create a Supabase Project
+1. Go to [supabase.com](https://supabase.com) → **Start your project** → sign in with GitHub
+2. **New Project** → pick a name, generate a database password (save it!), choose a region close to you
+3. Once created, go to **Project Settings → Database → Connection string** and copy:
+   - **Host** (e.g. `aws-0-ap-southeast-1.pooler.supabase.com`)
+   - **Port** → use **6543** (the connection pooler, recommended for apps like this)
+   - **Database** → `postgres`
+   - **User** → looks like `postgres.xxxxxxxxxxxx`
+   - **Password** → what you set in step 2
+
+### Step 2 — Push This Repo to GitHub
+```bash
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/Angelaczr/mini-erp-inventory.git
+git branch -M main
+git push -u origin main
+```
+
+### Step 3 — Deploy to Render
+1. [render.com](https://render.com) → **Login with GitHub** (no credit card required)
+2. **New** → **Web Service** → select this repo → Render auto-detects the `Dockerfile`
+3. Plan: **Free**
+4. Under **Environment Variables**, add:
+   ```
+   APP_ENV=production
+   APP_DEBUG=false
+   DB_CONNECTION=pgsql
+   DB_HOST=<your Supabase pooler host>
+   DB_PORT=6543
+   DB_DATABASE=postgres
+   DB_USERNAME=<your Supabase user, e.g. postgres.xxxxxxxxxxxx>
+   DB_PASSWORD=<your Supabase database password>
+   ```
+5. **Create Web Service** — Render builds and deploys. On first boot, the entrypoint script runs migrations and seeds demo data automatically.
+
+### Step 4 — Prevent Supabase Auto-Pause (already included)
+This repo ships with `.github/workflows/keep-alive.yml`, which pings your live demo once a day — keeping Supabase active without any manual work.
+
+**Before it works, edit one line:**
+1. Open `.github/workflows/keep-alive.yml`
+2. Replace `YOUR-APP-NAME` with your actual Render service URL
+3. Commit and push — GitHub Actions will handle the rest automatically
+
 ## 📄 License
 
 MIT — feel free to use this as a learning reference.
