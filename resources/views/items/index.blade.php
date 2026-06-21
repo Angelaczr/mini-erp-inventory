@@ -42,14 +42,25 @@
                         <td class="text-end">
                             <a href="{{ route('items.edit', $item) }}" class="btn btn-sm btn-outline-secondary">Edit</a>
 
-                            <form id="delete-form-{{ $item->id }}" action="{{ route('items.destroy', $item) }}"
+                            {{-- <form id="delete-form-{{ $item->id }}" action="{{ route('items.destroy', $item) }}"
                                 method="POST" style="display: none;">
                                 @csrf
                                 @method('DELETE')
+                            </form> --}}
+
+                            {{-- <button type="button" class="btn btn-sm btn-outline-danger"
+                                onclick="if(confirm('Yakin ingin menghapus item ini?')) { document.getElementById('delete-form-{{ $item->id }}').submit(); }">
+                                Delete
+                            </button> --}}
+
+                            <form id="delete-form-{{ $item->id }}" action="{{ route('items.destroy', $item) }}"
+                                method="POST" style="display: none;">
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <input type="hidden" name="_method" value="DELETE">
                             </form>
 
                             <button type="button" class="btn btn-sm btn-outline-danger"
-                                onclick="if(confirm('Yakin ingin menghapus item ini?')) { document.getElementById('delete-form-{{ $item->id }}').submit(); }">
+                                onclick="if(confirm('Yakin ingin menghapus data ini?')) { document.getElementById('delete-form-{{ $item->id }}').submit(); }">
                                 Delete
                             </button>
                         </td>
