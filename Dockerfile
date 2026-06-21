@@ -19,6 +19,9 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 
+# CRITICAL FIX: Izinkan Apache membaca .htaccess milik Laravel agar routing berfungsi
+RUN sed -i 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
+
 # Install PHP dependencies (production only)
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
@@ -31,4 +34,3 @@ RUN chmod +x /entrypoint.sh
 
 EXPOSE 80
 ENTRYPOINT ["/entrypoint.sh"]
-
