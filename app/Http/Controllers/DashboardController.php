@@ -13,13 +13,9 @@ class DashboardController extends Controller
         $warehouses = Warehouse::orderBy('name')->get();
         $items = Item::with('category')->orderBy('name')->get();
 
-        // Build a stock matrix: item x warehouse => current quantity
-        $stockMatrix = [];
-        foreach ($items as $item) {
-            foreach ($warehouses as $warehouse) {
-                $stockMatrix[$item->id][$warehouse->id] = $item->currentStock($warehouse->id);
-            }
-        }
+        // Single bulk query instead of looping currentStock() per item per
+        // warehouse — avoids N+1 queries (was ~50+ queries, now 1).
+        $stockMatrix = Item::stockMatrix();
 
         $lowStockItems = Item::lowStock()->with('category')->get();
 

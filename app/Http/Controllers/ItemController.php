@@ -16,10 +16,11 @@ class ItemController extends Controller
             ->orderBy('name')
             ->paginate(15);
 
-        // Attach computed current stock for display without N+1 issues
-        // by pre-loading stock movements alongside.
-        $items->getCollection()->transform(function (Item $item) {
-            $item->stock_now = $item->currentStock();
+        // Single bulk query instead of calling currentStock() per item
+        // (avoids N+1 queries on the items list).
+        $stockMap = Item::totalStockMap();
+        $items->getCollection()->transform(function (Item $item) use ($stockMap) {
+            $item->stock_now = $stockMap[$item->id] ?? 0;
             return $item;
         });
 

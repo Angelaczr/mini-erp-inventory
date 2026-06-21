@@ -6,8 +6,8 @@ name: Keep Demo Alive
 
 on:
   schedule:
-    - cron: "0 3 * * *" # daily at 03:00 UTC
-  workflow_dispatch: # allows manually triggering from the Actions tab
+    - cron: '0 3 * * *'   # daily at 03:00 UTC
+  workflow_dispatch:        # allows manually triggering from the Actions tab
 
 jobs:
   ping:
@@ -15,6 +15,6 @@ jobs:
     steps:
       - name: Ping live demo
         run: |
-          curl -sSf --retry 3 --retry-delay 10 "https://mini-inventory-erp.onrender.com/" \
+          curl -sSf --retry 3 --retry-delay 10 "https://YOUR-APP-NAME.onrender.com/" \
             && echo "Ping successful" \
             || echo "Ping failed — check if the Render service is still active"
